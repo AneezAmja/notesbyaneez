@@ -1,4 +1,4 @@
-// import 'package:Nee_notes/main.dart';
+// import 'package:aneez_notes/main.dart';
 // import 'package:flutter/material.dart';
 
 // class Setting extends StatefulWidget {
