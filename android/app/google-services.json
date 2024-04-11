@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "97156860618",
+    "firebase_url": "https://nee-notes-3114d.firebaseio.com",
+    "project_id": "nee-notes-3114d",
+    "storage_bucket": "nee-notes-3114d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:97156860618:android:0fcf96e1824b6fed464233",
+        "android_client_info": {
+          "package_name": "com.example.Nee_notes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "97156860618-s4fgdf1uhv3f227sq1s0hlk3hkbct4ei.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXjBC_gsKJ1hXNfxAiyc11XhlA4Ujh830"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "97156860618-s4fgdf1uhv3f227sq1s0hlk3hkbct4ei.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
