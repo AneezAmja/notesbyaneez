@@ -1,15 +1,18 @@
-
 import 'package:aneez_notes/main.dart';
-import 'package:aneez_notes/models/notes.dart';
+import 'package:aneez_notes/models/note_model.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+/* 
+ This file defines a Flutter widget for creating and editing notes. 
+ It includes functionality for saving notes to Firestore, deleting notes, 
+ and customizing note appearance based on the app's theme settings.
+*/
 
 class Note extends StatefulWidget {
   final Notes notes;
 
-  Note({Key key, @required this.notes}) : super(key: key);
-
-  // MyApp ma;
+  Note({Key? key, required this.notes}) : super(key: key);
 
   @override
   _NoteState createState() => _NoteState();
@@ -53,7 +56,7 @@ class _NoteState extends State<Note> {
           color: themeFontColour(), //change your color here
         ),
         actions: <Widget>[
-          addDeleteIcon(),
+          deleteNote(),
           IconButton(
             icon: Icon(
               Icons.save,
@@ -78,17 +81,20 @@ class _NoteState extends State<Note> {
           ),
         ],
       ),
-      resizeToAvoidBottomPadding: false,
       backgroundColor: themeColour(),
       body: new SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        physics: AlwaysScrollableScrollPhysics(),
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           margin: EdgeInsets.fromLTRB(20.0, 10.0, 15.0, 0),
           child: Column(
             children: [
-              addTitle(),
-              addText(),
+              writeNoteTitle(),
+              writeNoteText(),
             ],
           ),
         ),
@@ -96,24 +102,40 @@ class _NoteState extends State<Note> {
     );
   }
 
-  Widget addDeleteIcon() {
+  Widget deleteNote() {
     return IconButton(
       icon: Icon(
         Icons.delete,
       ),
       onPressed: () async {
-        await db.collection('notes').get().then((snapshot) {
-          for (DocumentSnapshot ds in snapshot.docs) {
-            ds.reference.delete();
-          }
-        });
+        // await db.collection('notes').get().then((snapshot) {
+        //   for (DocumentSnapshot ds in snapshot.docs) {
+        //     ds.reference.delete();
+        //   }
+        // });
+
+        try {
+          // Get the ID of the current note
+          String noteId = widget.notes.noteId;
+
+          // Create a reference to the document with the current note's ID
+          DocumentReference docRef = db.collection('notes').doc(noteId);
+
+          // Delete the document
+          await docRef.delete();
+
+          // Navigate back to the previous screen
+          Navigator.of(context).pop();
+        } catch (e) {
+          print('Error deleting note: $e');
+        }
 
         Navigator.of(context).popUntil((route) => route.isFirst);
       },
     );
   }
 
-  Widget addTitle() {
+  Widget writeNoteTitle() {
     return TextField(
       maxLines: null,
       controller: _titleController,
@@ -122,12 +144,13 @@ class _NoteState extends State<Note> {
       decoration: InputDecoration(
         border: InputBorder.none,
         hintText: 'Title',
-        hintStyle: TextStyle(color: themeFontColour(), fontSize: 23),
+        hintStyle:
+            TextStyle(color: themeFontColour().withOpacity(0.3), fontSize: 23),
       ),
     );
   }
 
-  Widget addText() {
+  Widget writeNoteText() {
     return Flexible(
       child: TextField(
         maxLines: null,
@@ -136,8 +159,9 @@ class _NoteState extends State<Note> {
         style: TextStyle(color: themeFontColour(), fontSize: 16),
         decoration: InputDecoration(
           border: InputBorder.none,
-          hintText: 'Take note',
-          hintStyle: TextStyle(color: themeFontColour(), fontSize: 16),
+          hintText: 'Let your notes run wild',
+          hintStyle: TextStyle(
+              color: themeFontColour().withOpacity(0.3), fontSize: 16),
         ),
       ),
     );
