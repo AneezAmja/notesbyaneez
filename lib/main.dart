@@ -1,27 +1,26 @@
-import 'package:aneez_notes/models/notes.dart';
+import 'package:aneez_notes/models/note_model.dart';
 import 'package:aneez_notes/note.dart';
-import 'package:aneez_notes/setting.dart';
+// import 'package:aneez_notes/setting.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'dart:html';
-
-// import 'package:firebase/firestore.dart';
-// import 'package:firebase/firestore.dart';
-// import 'package:firebase/firebase.dart';
-
-// void main() => runApp(MaterialApp(
-//       title: "Nee notes",
-//       home: MyApp(),
-//       debugShowCheckedModeBanner: false,
-//     ));
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
+  await dotenv.load(fileName: '.env');
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+      options: FirebaseOptions(
+    apiKey: '${dotenv.env['API_KEY']}',
+    appId: '${dotenv.env['APP_ID']}',
+    messagingSenderId: 'sendid',
+    projectId: '${dotenv.env['PROJECT_ID']}',
+    storageBucket: '${dotenv.env['STORAGE_BUCKET']}',
+  ));
+
   runApp(MaterialApp(
-    title: "Nee notes",
+    title: "NotesbyAneez",
     home: MyApp(),
     debugShowCheckedModeBanner: false,
   ));
@@ -81,8 +80,21 @@ class MyAppState extends State<MyApp> {
   }
 
   Widget buildNotes(BuildContext context, DocumentSnapshot document) {
+    if (!document.exists) {
+      // Handle null or non-existent document
+      return SizedBox();
+    }
+
     //Getting the note's data from Firestore and saving it as a variable
     final note = Notes.fromFirestore(document);
+
+    final data =
+        document.data() as Map<String, dynamic>?; // Cast to the correct type
+
+    if (data == null) {
+      // Handle the case when data is null
+      return SizedBox();
+    }
 
     return Card(
       margin: EdgeInsets.fromLTRB(10, 10, 10, 5),
@@ -100,7 +112,7 @@ class MyAppState extends State<MyApp> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0.0, 8.0, 0, 8.0),
                   child: Text(
-                    document.data()['title'],
+                    data['title'] ?? "",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 23,
@@ -108,8 +120,11 @@ class MyAppState extends State<MyApp> {
                   ),
                 ),
                 Text(
-                  document.data()['text'],
-                  style: TextStyle(fontSize: 15, color: themeFontColour()),
+                  data['text'] ?? "",
+                  style: TextStyle(
+                      fontSize: 15,
+                      color: themeFontColour(),
+                      overflow: TextOverflow.ellipsis),
                 )
               ],
             ),
@@ -133,10 +148,27 @@ class MyAppState extends State<MyApp> {
         backgroundColor: themeColour(),
         centerTitle: true,
         title: Center(
-            child: Text(
-          "Nee Notes",
-          style: TextStyle(color: themeFontColour()),
-        )),
+          child: RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: 'Notes ',
+                  style: TextStyle(
+                      color: themeFontColour(),
+                      fontStyle: FontStyle.normal,
+                      fontSize: 18),
+                ),
+                TextSpan(
+                  text: 'by Aneez',
+                  style: TextStyle(
+                      color: themeFontColour(),
+                      fontStyle: FontStyle.italic,
+                      fontSize: 18),
+                ),
+              ],
+            ),
+          ),
+        ),
         actions: <Widget>[
           IconButton(
             icon: themeSwitch
@@ -156,23 +188,40 @@ class MyAppState extends State<MyApp> {
       body: Container(
         color: themeColour(),
         child: StreamBuilder(
-            stream: FirebaseFirestore.instance.collection('notes').snapshots(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) return const Text("Test");
+          stream: FirebaseFirestore.instance
+              .collection('notes')
+              .orderBy('timestamp', descending: true)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            }
 
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator(); // or any other loading indicator
+            }
+
+            // Ensure snapshot.data is not null before accessing documents
+            if (snapshot.data != null) {
               return ListView.builder(
-                itemCount: snapshot.data.documents.length,
+                itemCount: snapshot
+                    .data!.docs.length, // Access docs instead of documents
                 itemBuilder: (context, index) =>
-                    buildNotes(context, snapshot.data.documents[index]),
+                    buildNotes(context, snapshot.data!.docs[index]),
               );
-            }),
+            } else {
+              return Text(
+                  'No data available'); // Handle case when snapshot.data is null
+            }
+          },
+        ),
       ),
-      floatingActionButton: addNote(),
+      floatingActionButton: createNote(),
     );
   }
 
-  Widget addNote() {
-    Notes tempNote = Notes('', '');
+  Widget createNote() {
+    Notes tempNote = Notes('', '', '', DateTime.now());
     return FloatingActionButton.extended(
       onPressed: () {
         Navigator.push(
