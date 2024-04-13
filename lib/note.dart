@@ -55,31 +55,7 @@ class _NoteState extends State<Note> {
         iconTheme: IconThemeData(
           color: themeFontColour(), //change your color here
         ),
-        actions: <Widget>[
-          deleteNote(),
-          IconButton(
-            icon: Icon(
-              Icons.save,
-            ),
-            onPressed: () async {
-              widget.notes.noteTitle = _titleController.text;
-              widget.notes.noteText = _textController.text;
-/*.then(function(docRef) {
-    console.log("Document written with ID: ", docRef.id);
-})*/
-              await db
-                  .collection('notes')
-                  .add(widget.notes.toJson())
-                  .then((DocumentReference dr) {
-                print("Document written with ID: " + dr.id);
-              });
-
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => MyApp()));
-              //get title and text save to db
-            },
-          ),
-        ],
+        actions: <Widget>[deleteNote(), saveNote()],
       ),
       backgroundColor: themeColour(),
       body: new SingleChildScrollView(
@@ -102,18 +78,40 @@ class _NoteState extends State<Note> {
     );
   }
 
+  Widget saveNote() {
+    return IconButton(
+      icon: Icon(
+        Icons.save,
+      ),
+      onPressed: () async {
+        widget.notes.noteTitle = _titleController.text;
+        widget.notes.noteText = _textController.text;
+
+        await db
+            .collection('notes')
+            .doc(widget.notes.noteId)
+            .set(widget.notes.toJson());
+
+        // await db
+        //     .collection('notes')
+        //     .add(widget.notes.toJson())
+        //     .then((DocumentReference dr) {
+        //   print("Document written with ID: " + dr.id);
+        // });
+
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => MyApp()));
+        //get title and text save to db
+      },
+    );
+  }
+
   Widget deleteNote() {
     return IconButton(
       icon: Icon(
         Icons.delete,
       ),
       onPressed: () async {
-        // await db.collection('notes').get().then((snapshot) {
-        //   for (DocumentSnapshot ds in snapshot.docs) {
-        //     ds.reference.delete();
-        //   }
-        // });
-
         try {
           // Get the ID of the current note
           String noteId = widget.notes.noteId;
