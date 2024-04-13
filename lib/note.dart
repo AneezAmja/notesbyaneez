@@ -140,7 +140,11 @@ class _NoteState extends State<Note> {
       maxLines: null,
       controller: _titleController,
       cursorColor: Colors.white,
-      style: TextStyle(color: themeFontColour(), fontSize: 23),
+      style: TextStyle(
+        color: themeFontColour(),
+        fontSize: 23,
+        fontFamily: 'Inter',
+      ),
       decoration: InputDecoration(
         border: InputBorder.none,
         hintText: 'Title',
@@ -156,7 +160,11 @@ class _NoteState extends State<Note> {
         maxLines: null,
         controller: _textController,
         cursorColor: Colors.white,
-        style: TextStyle(color: themeFontColour(), fontSize: 16),
+        style: TextStyle(
+          color: themeFontColour(),
+          fontSize: 16,
+          fontFamily: 'Inter',
+        ),
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: 'Let your notes run wild',
