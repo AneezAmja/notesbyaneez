@@ -137,7 +137,7 @@ class _NoteState extends State<Note> {
     return TextField(
       maxLines: null,
       controller: _titleController,
-      cursorColor: Colors.white,
+      cursorColor: themeFontColour(),
       style: TextStyle(
         color: themeFontColour(),
         fontSize: 23,
@@ -157,7 +157,7 @@ class _NoteState extends State<Note> {
       child: TextField(
         maxLines: null,
         controller: _textController,
-        cursorColor: Colors.white,
+        cursorColor: themeFontColour(),
         style: TextStyle(
           color: themeFontColour(),
           fontSize: 16,
