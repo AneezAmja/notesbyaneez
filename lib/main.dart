@@ -129,7 +129,7 @@ class MyAppState extends State<MyApp> {
         ],
       ),
       body: Container(
-        margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         color: themeColour(),
         child: StreamBuilder(
           stream: FirebaseFirestore.instance
