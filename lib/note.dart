@@ -34,8 +34,13 @@ class _NoteState extends State<Note> {
   @override
   void initState() {
     super.initState();
-    _titleController.text = widget.notes.noteTitle;
-    _textController.text = widget.notes.noteText;
+    if (widget.notes.noteId.isEmpty) {
+      _titleController.text = '';
+      _textController.text = '';
+    } else {
+      _titleController.text = widget.notes.noteTitle;
+      _textController.text = widget.notes.noteText;
+    }
   }
 
   dynamic themeNoteColour() {
@@ -87,21 +92,30 @@ class _NoteState extends State<Note> {
         widget.notes.noteTitle = _titleController.text;
         widget.notes.noteText = _textController.text;
 
-        await db
-            .collection('notes')
-            .doc(widget.notes.noteId)
-            .set(widget.notes.toJson());
+        if (widget.notes.noteId.isNotEmpty) {
+          // Update existing note
+          try {
+            await db
+                .collection('notes')
+                .doc(widget.notes.noteId)
+                .update(widget.notes.toJson());
 
-        // await db
-        //     .collection('notes')
-        //     .add(widget.notes.toJson())
-        //     .then((DocumentReference dr) {
-        //   print("Document written with ID: " + dr.id);
-        // });
+            // Navigate back to the previous screen
+            Navigator.pop(context);
+          } catch (e) {
+            print('Error updating note: $e');
+          }
+        } else {
+          // Create new note
+          try {
+            await db.collection('notes').add(widget.notes.toJson());
 
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => MyApp()));
-        //get title and text save to db
+            // Navigate back to the home screen
+            Navigator.pop(context);
+          } catch (e) {
+            print('Error creating note: $e');
+          }
+        }
       },
     );
   }
@@ -139,15 +153,17 @@ class _NoteState extends State<Note> {
       controller: _titleController,
       cursorColor: themeFontColour(),
       style: TextStyle(
-        color: themeFontColour(),
-        fontSize: 23,
-        fontFamily: 'Inter',
-      ),
+          color: themeFontColour(),
+          fontSize: 23,
+          fontFamily: 'Inter',
+          fontWeight: FontWeight.bold),
       decoration: InputDecoration(
         border: InputBorder.none,
         hintText: 'Title',
-        hintStyle:
-            TextStyle(color: themeFontColour().withOpacity(0.3), fontSize: 23),
+        hintStyle: TextStyle(
+          color: themeFontColour().withOpacity(0.3),
+          fontSize: 23,
+        ),
       ),
     );
   }
