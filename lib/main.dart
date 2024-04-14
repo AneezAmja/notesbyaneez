@@ -70,16 +70,13 @@ class MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      systemNavigationBarColor: themeColour(),
-    ));
   }
 
   @override
   Widget build(BuildContext context) {
-    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    //   systemNavigationBarColor: const Color(0xff18191b),
-    // ));
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      systemNavigationBarColor: const Color(0xff18191b),
+    ));
     return Scaffold(
       appBar: AppBar(
         backgroundColor: themeColour(),
@@ -124,64 +121,68 @@ class MyAppState extends State<MyApp> {
           )
         ],
       ),
-      body: Container(
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-        color: themeColour(),
-        child: StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('notes')
-              .orderBy('timestamp', descending: true)
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            }
+      body: AnimatedSwitcher(
+        duration: Duration(milliseconds: 250),
+        child: Container(
+          key: ValueKey<bool>(themeSwitch),
+          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          color: themeColour(),
+          child: StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('notes')
+                .orderBy('timestamp', descending: true)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              }
 
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator(); // or any other loading indicator
-            }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              }
 
-            /* When there is no documents */
-            if (snapshot.data!.docs.isEmpty) {
-              return Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                child: Align(
-                  alignment: Alignment(0.0, -0.2),
-                  child: Text(
-                    "No notes created (⁠╥⁠﹏⁠╥⁠)",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 15,
-                        color: themeFontColour()),
+              /* When there is no documents */
+              if (snapshot.data!.docs.isEmpty) {
+                return Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: Align(
+                    alignment: Alignment(0.0, -0.2),
+                    child: Text(
+                      "No notes created (⁠╥⁠﹏⁠╥⁠)",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 15,
+                          color: themeFontColour()),
+                    ),
                   ),
-                ),
-              );
-            }
-            // Checking is data is available in firebase
-            if (snapshot.data != null) {
-              return GridView.builder(
-                // creates items lazily as they are scrolled into view
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 8.0, // Spacing between col
-                  mainAxisSpacing: 8.0, // Spacing between rows
-                ),
-                itemCount: snapshot.data!.docs.length,
-                itemBuilder: (context, index) =>
-                    buildNotes(context, snapshot.data!.docs[index]),
-              );
-            } else {
-              return Text(
-                'No data available',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    color: themeFontColour()),
-              ); // Handle case when snapshot.data is null
-            }
-          },
+                );
+              }
+              // Checking is data is available in firebase
+              if (snapshot.data != null) {
+                return GridView.builder(
+                  // creates items lazily as they are scrolled into view
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 8.0, // Spacing between col
+                    mainAxisSpacing: 8.0, // Spacing between rows
+                  ),
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, index) =>
+                      buildNotes(context, snapshot.data!.docs[index]),
+                );
+              } else {
+                return Text(
+                  'No data available',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: themeFontColour()),
+                ); // Handle case when snapshot.data is null
+              }
+            },
+          ),
         ),
       ),
       floatingActionButton: createNoteFloatingButton(),
