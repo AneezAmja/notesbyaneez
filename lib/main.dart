@@ -67,23 +67,19 @@ dynamic themeCardColour() {
 }
 
 class MyAppState extends State<MyApp> {
-  // var primaryColour = const Color(0xffd03056);
-  // var secondaryColour = const Color(0xff791C31);
-  // var tertiaryColour = const Color(0xff333534);
-
   @override
   void initState() {
     super.initState();
-    // Firebase.initializeApp().whenComplete(() {
-    //   print("completed");
-    //   setState(() {});
-    // });
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      systemNavigationBarColor: themeColour(),
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(systemNavigationBarColor: themeColour()));
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    //   systemNavigationBarColor: const Color(0xff18191b),
+    // ));
     return Scaffold(
       appBar: AppBar(
         backgroundColor: themeColour(),
@@ -145,7 +141,25 @@ class MyAppState extends State<MyApp> {
               return CircularProgressIndicator(); // or any other loading indicator
             }
 
-            // Ensure snapshot.data is not null before accessing documents
+            /* When there is no documents */
+            if (snapshot.data!.docs.isEmpty) {
+              return Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: Align(
+                  alignment: Alignment(0.0, -0.2),
+                  child: Text(
+                    "No notes created (⁠╥⁠﹏⁠╥⁠)",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 15,
+                        color: themeFontColour()),
+                  ),
+                ),
+              );
+            }
+            // Checking is data is available in firebase
             if (snapshot.data != null) {
               return GridView.builder(
                 // creates items lazily as they are scrolled into view
@@ -160,7 +174,12 @@ class MyAppState extends State<MyApp> {
               );
             } else {
               return Text(
-                  'No data available'); // Handle case when snapshot.data is null
+                'No data available',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: themeFontColour()),
+              ); // Handle case when snapshot.data is null
             }
           },
         ),
@@ -181,7 +200,7 @@ class MyAppState extends State<MyApp> {
     final data =
         document.data() as Map<String, dynamic>?; // Cast to the correct type
 
-    if (data == null) {
+    if (data == null || data.isEmpty) {
       // Handle the case when data is null
       return SizedBox();
     }
