@@ -56,7 +56,6 @@ class _NoteState extends State<Note> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: themeColour(),
-        elevation: 0,
         iconTheme: IconThemeData(
           color: themeFontColour(), //change your color here
         ),
