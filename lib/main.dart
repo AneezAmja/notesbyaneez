@@ -138,7 +138,9 @@ class MyAppState extends State<MyApp> {
               }
 
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
               }
 
               /* When there is no documents */
