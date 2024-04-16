@@ -148,6 +148,7 @@ class _NoteState extends State<Note> {
 
   Widget writeNoteTitle() {
     return TextField(
+      textCapitalization: TextCapitalization.sentences,
       maxLines: null,
       controller: _titleController,
       cursorColor: themeFontColour(),
@@ -170,6 +171,7 @@ class _NoteState extends State<Note> {
   Widget writeNoteText() {
     return Flexible(
       child: TextField(
+        textCapitalization: TextCapitalization.sentences,
         maxLines: null,
         controller: _textController,
         cursorColor: themeFontColour(),
