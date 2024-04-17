@@ -212,8 +212,8 @@ class MyAppState extends State<MyApp> {
       // margin: EdgeInsets.fromLTRB(6, 0, 6, 0),
       color: themeCardColour(),
       elevation: 5.0,
-      shape: RoundedRectangleBorder(
-          borderRadius: new BorderRadius.all(new Radius.circular(10.0))),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0))),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(3.0, 8.0, 3.0, 8.0),
         child: InkWell(
