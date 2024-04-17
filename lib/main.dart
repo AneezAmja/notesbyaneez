@@ -217,6 +217,10 @@ class MyAppState extends State<MyApp> {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(3.0, 8.0, 3.0, 8.0),
         child: InkWell(
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => Note(notes: note)));
+          },
           child: ListTile(
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -244,10 +248,6 @@ class MyAppState extends State<MyApp> {
                 )
               ],
             ),
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => Note(notes: note)));
-            },
           ),
         ),
       ),
