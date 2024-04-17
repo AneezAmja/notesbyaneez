@@ -19,7 +19,7 @@ This is a note taking application that allows the user to create, read, update a
 
 ### Clone Repository
 
-```https://github.com/AneezAmja/notesbyaneez.git```
+```git clone https://github.com/AneezAmja/notesbyaneez.git```
 
 ### Project Setup: <br>
 
