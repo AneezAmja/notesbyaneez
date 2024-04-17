@@ -125,7 +125,7 @@ class MyAppState extends State<MyApp> {
         duration: Duration(milliseconds: 250),
         child: Container(
           key: ValueKey<bool>(themeSwitch),
-          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
           color: themeColour(),
           child: StreamBuilder(
             stream: FirebaseFirestore.instance
