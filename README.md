@@ -1,16 +1,51 @@
-# Aneez_notes
+# Pokedex
 
-A new Flutter project.
+## About The Project
 
-## Getting Started
+This is a note taking application that allows the user to create, read, update and delete their notes. Utilising Flutter for the UI and Firebase for the NoSQL database for storing data.
 
-This project is a starting point for a Flutter application.
+### Built With
 
-A few resources to get you started if this is your first Flutter project:
+* [Flutter](https://flutter.dev/) - UI development kit that is used to build natively compiled applications for mobile, web, and desktop from a single codebase.
+* [Firebase](https://firebase.google.com/) - Firebase acts as a real-time database. This real-time database is a NoSQL cloud database that allows developers to store and synchronise data between users in real-time.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Installation & Setup:
+
+### Prerequisites:
+    - Flutter SDK
+    - Android SDK
+
+
+### Clone Repository
+
+```https://github.com/AneezAmja/notesbyaneez.git```
+
+### Project Setup: <br>
+
+#### Starting the Application:
+
+Create a firebase project using the firebase console and add the google-services.json in the android/app directory and within the project root file create an .env file that contains: API_KEY, APP_ID, PROJECT_ID, STORAGE_BUCKET
+
+```flutter run```
+
+**Project Structure:**
+
+* **lib:** Central repository for your application's Dart codebase. Within this folder, you'll find the essential components that define your app's user interface, manage its state, and handle business logic.
+
+
+## Contributing
+
+Contributions are very welcome. Please follow the below steps:
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+
+## Contact
+
+Aneez Amja - [@AneezAmja](https://www.linkedin.com/in/aneez-amja-19236a216/) - aneez.amja@gmail.com
+
