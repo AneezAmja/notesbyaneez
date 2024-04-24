@@ -4,6 +4,9 @@
 
 This is a note taking application that allows the user to create, read, update and delete their notes. Utilising Flutter for the UI and Firebase for the NoSQL database for storing data.
 
+![aneez_notes-2](https://github.com/AneezAmja/notesbyaneez/assets/22137055/bc814f73-6b99-4ad3-ae2b-1325f146e5a0)
+
+
 ### Built With
 
 * [Flutter](https://flutter.dev/) - UI development kit that is used to build natively compiled applications for mobile, web, and desktop from a single codebase.
