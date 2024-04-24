@@ -1,4 +1,4 @@
-# Pokedex
+# Notes by Aneez
 
 ## About The Project
 
