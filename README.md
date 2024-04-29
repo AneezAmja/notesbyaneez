@@ -36,6 +36,10 @@ Create a firebase project using the firebase console and add the google-services
 
 * **lib:** Central repository for your application's Dart codebase. Within this folder, you'll find the essential components that define your app's user interface, manage its state, and handle business logic.
 
+## Future features
+ - [ ] Add in the feature to group notes
+ - [ ] Allow users to favourite their notes
+ - [ ] Add in functionality to have a WYSIWYG
 
 ## Contributing
 
