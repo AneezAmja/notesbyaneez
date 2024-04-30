@@ -40,6 +40,8 @@ Create a firebase project using the firebase console and add the google-services
  - [ ] Add in the feature to group notes
  - [ ] Allow users to favourite their notes
  - [ ] Add in functionality to have a WYSIWYG
+ - [ ] Have a search bar
+ - [ ] Swipe/hold to delete notes
 
 ## Contributing
 
